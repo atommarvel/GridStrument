@@ -3,15 +3,13 @@ package com.gmail.rallen.gridstrument;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.AsyncTask;
-import android.preference.PreferenceManager;
-import android.support.v7.app.ActionBar;
-import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
+import android.support.v7.app.AppCompatActivity;
 import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.view.View;
 
 import com.illposed.osc.OSCMessage;
 import com.illposed.osc.OSCPortOut;
@@ -22,7 +20,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 
 public class MainActivity
-        extends ActionBarActivity
+        extends AppCompatActivity
         implements TuningDialogFragment.OnTuningDialogDoneListener
 {
     private final static int PREF_REQ_CODE = 99;
