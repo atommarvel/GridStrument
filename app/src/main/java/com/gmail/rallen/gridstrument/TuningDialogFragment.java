@@ -2,7 +2,6 @@ package com.gmail.rallen.gridstrument;
 
 import android.app.Activity;
 import android.os.Bundle;
-import android.support.v4.app.DialogFragment;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -14,6 +13,8 @@ import android.widget.NumberPicker;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.ArrayList;
+
+import androidx.fragment.app.DialogFragment;
 
 // found a template for this at
 // http://www.i-programmer.info/programming/android/7647-android-adventures-a-numberpicker-dialogfragment-project.html

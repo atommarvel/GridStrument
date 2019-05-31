@@ -5,7 +5,6 @@ import android.graphics.PointF;
 import android.opengl.GLSurfaceView;
 import android.opengl.Matrix;
 import android.os.AsyncTask;
-import android.support.annotation.NonNull;
 import android.util.Log;
 import android.view.MotionEvent;
 
@@ -14,6 +13,8 @@ import com.illposed.osc.OSCPortOut;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+
+import androidx.annotation.NonNull;
 
 /**
  * GridGLSurfaceView (really a ViewController)
