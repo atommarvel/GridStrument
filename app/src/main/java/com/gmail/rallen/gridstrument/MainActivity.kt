@@ -69,7 +69,7 @@ class MainActivity : AppCompatActivity(), TuningDialogFragment.OnTuningDialogDon
         else -> super.onOptionsItemSelected(item)
     }
 
-    override fun onTuningDialogDone(values: ArrayList<Int>?) = tryLog {
+    override fun onTuningDialogDone(values: List<Int>?) = tryLog {
         checkNotNull(values)
         updateBaseNotes(values)
         gLView.baseNotes = ArrayList(baseNotes)

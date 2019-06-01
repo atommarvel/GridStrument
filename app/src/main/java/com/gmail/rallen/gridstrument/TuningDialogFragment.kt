@@ -19,7 +19,7 @@ import java.util.ArrayList
  * http://www.i-programmer.info/programming/android/7647-android-adventures-a-numberpicker-dialogfragment-project.html
  */
 class TuningDialogFragment : DialogFragment() {
-    private var values: ArrayList<Int> = ArrayList()
+    private var values: List<Int> = emptyList()
     private var numPickers: Array<NumberPicker> = arrayOf()
     private var mListener: OnTuningDialogDoneListener? = null
 
@@ -33,7 +33,7 @@ class TuningDialogFragment : DialogFragment() {
     }
 
     interface OnTuningDialogDoneListener {
-        fun onTuningDialogDone(values: ArrayList<Int>?)
+        fun onTuningDialogDone(values: List<Int>?)
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -43,7 +43,7 @@ class TuningDialogFragment : DialogFragment() {
 
     override fun onSaveInstanceState(outState: Bundle) {
         super.onSaveInstanceState(outState)
-        outState.putIntegerArrayList(KEY_CURR_VALUES, values)
+        outState.putIntegerArrayList(KEY_CURR_VALUES, ArrayList(values))
     }
 
     private fun getValuesFromPickers() {
@@ -120,7 +120,7 @@ class TuningDialogFragment : DialogFragment() {
         private const val KEY_CURR_VALUES = "curr_values"
         private val notes = arrayOf("C", "C♯", "D", "D♯", "E", "F", "F♯", "G", "G♯", "A", "A♯", "B")
 
-        fun newInstance(initValues: ArrayList<Int>): TuningDialogFragment = TuningDialogFragment().apply {
+        fun newInstance(initValues: List<Int>): TuningDialogFragment = TuningDialogFragment().apply {
             arguments = bundleOf(KEY_BASE_NOTES to initValues)
         }
     }

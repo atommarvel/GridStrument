@@ -12,12 +12,12 @@ import android.view.MotionEvent
  * GridGLSurfaceView (really a ViewController)
  * TODO: Extract out logic to separate classes. this class should only own ui
  */
-class GridGLSurfaceView @JvmOverloads constructor(context: Context, initialBaseNotes: ArrayList<Int> = ArrayList()) : GLSurfaceView(context) {
+class GridGLSurfaceView @JvmOverloads constructor(context: Context, initialBaseNotes: List<Int> = emptyList()) : GLSurfaceView(context) {
 
     // configuration options
     private var pitchBendRange = 12    // how far to stretch? 1 grid unit?  12?
 
-    var baseNotes: ArrayList<Int> = initialBaseNotes
+    var baseNotes: List<Int> = initialBaseNotes
         set(newValue) {
             assert(newValue.size == field.size)
             field = newValue
@@ -87,7 +87,6 @@ class GridGLSurfaceView @JvmOverloads constructor(context: Context, initialBaseN
         xdpi = ydpi
         cellHeight = 200f
         cellWidth = cellHeight
-        this.baseNotes.addAll(baseNotes)
     }
 
     fun setDPI(xdpi: Float, ydpi: Float) {
@@ -139,14 +138,15 @@ class GridGLSurfaceView @JvmOverloads constructor(context: Context, initialBaseN
         gridLines = GridLines(0.9f, 0.9f, 0.9f, 1.0f)
         noteRects = ArrayList()
         if (baseNotes.size != numVertCells) {
-            val oldSize = baseNotes.size
+            val resizedBaseNotes = baseNotes.toMutableList()
+            val oldSize = resizedBaseNotes.size
             if (oldSize < numVertCells) {
                 for (i in oldSize until numVertCells) {
-                    baseNotes.add(baseNotes[oldSize - 1] + 5) // have to pick something
+                    resizedBaseNotes.add(baseNotes[oldSize - 1] + 5) // have to pick something
                 }
             } else {
                 for (i in oldSize - 1 downTo numVertCells) {
-                    baseNotes.removeAt(i)
+                    resizedBaseNotes.removeAt(i)
                 }
             }
             mainActivity!!.resizeBaseNotes(baseNotes)
@@ -331,8 +331,6 @@ class GridGLSurfaceView @JvmOverloads constructor(context: Context, initialBaseN
     }
 
     companion object {
-        private val MAX_NOTES = 16  // maybe 2 players can drive?
-
         internal fun clamp(min: Float, max: Float, x: Float): Float {
             return if (x > max) max else if (x < min) min else x
         }
