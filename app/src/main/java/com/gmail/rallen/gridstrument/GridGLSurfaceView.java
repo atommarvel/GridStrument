@@ -289,14 +289,16 @@ public class GridGLSurfaceView extends GLSurfaceView {
             int vi = (int)clamp(0f, 127f, (float)Math.floor(velocity*127 + 0.5f));
             Log.d("sendNoteOn",String.format("/vkb_midi/%d/note/%d=%d",channel,note,vi));
 //            new OSCSendMessageTask(String.format("/vkb_midi/%d/note/%d",channel,note)).execute(vi);
-            mMidiRepo.noteOn(channel, note, (int) velocity );
+            MidiEvent midiEvent = new MidiNoteEvent( note, NoteTrigger.ON );
+            mMidiRepo.send( midiEvent );
         }
 
         public void sendNoteOff(int channel, int note, float velocity) {
             int vi = (int)clamp(0f, 127f, (float)Math.floor(velocity*127 + 0.5f));
             Log.d("sendNoteOff",String.format("/vkb_midi/%d/note/%d=%d",channel,note,vi));
 //            new OSCSendMessageTask(String.format("/vkb_midi/%d/note/%d",channel,note)).execute(vi);
-            mMidiRepo.noteOff(channel, note, (int) velocity );
+            MidiEvent midiEvent = new MidiNoteEvent( note, NoteTrigger.OFF );
+            mMidiRepo.send( midiEvent );
         }
     }
 

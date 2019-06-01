@@ -29,38 +29,20 @@ class MidiRepository(private val context: Context) : MidiManager.OnDeviceOpenedL
         connectToFirstAvailableDevice()
     }
 
-    fun noteOn(channel: Int, note: Int, velocity: Int) {
-        val buffer = ByteArray(32)
-        var numBytes = 0
-        buffer[numBytes++] = (0x90 + (0)).toByte() // note on
-        buffer[numBytes++] = note.toByte()
-        buffer[numBytes++] = 64.toByte() // max velocity
-        val offset = 0
-        // post is non-blocking
-        inputPort?.send(buffer, offset, numBytes)
-    }
-
-    fun noteOff(channel: Int, note: Int, velocity: Int) {
-        val buffer = ByteArray(32)
-        var numBytes = 0
-        buffer[numBytes++] = (0x80 + (0)).toByte() // note off
-        buffer[numBytes++] = note.toByte()
-        buffer[numBytes++] = 64.toByte() // max velocity?
-        val offset = 0
-        // post is non-blocking
-        inputPort?.send(buffer, offset, numBytes)
+    fun send(midiEvent: MidiEvent) = tryLog {
+        inputPort?.send(midiEvent.byteArray, 0, midiEvent.byteCount)
     }
 
     private fun connectToFirstAvailableDevice() = tryLog {
+        // Grab the first device that has an input port.
         val deviceInfo = midiManager.devices.firstOrNull { deviceInfo ->
             deviceInfo.inputPortCount > 0
         }
 
-        if (deviceInfo == null) {
-            log("no devices available to connect to")
-            return
-        } else {
+        if (deviceInfo != null) {
             midiManager.openDevice(deviceInfo, this, handler)
+        } else {
+            log("no devices available to connect to")
         }
     }
 
