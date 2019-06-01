@@ -1,16 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
-    <EditTextPreference
-        android:title="Server IP Address"
-        android:key="server_ip"
-        android:defaultValue="@string/default_host_ip"
-        android:summary="Please provide the destination computer IP address."/>
-    <EditTextPreference
-        android:title="Server Port Number"
-        android:key="server_port"
-        android:inputType="number"
-        android:defaultValue="@string/default_host_port"
-        android:summary="Please provide the destination computer port."/>
     <ListPreference
         android:title="Pitch Bend Range"
         android:key="pitch_bend_range"
