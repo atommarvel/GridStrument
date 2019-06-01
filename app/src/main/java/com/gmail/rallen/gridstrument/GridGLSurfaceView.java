@@ -166,7 +166,7 @@ public class GridGLSurfaceView extends GLSurfaceView {
                     mBaseNotes.remove(i);
                 }
             }
-            mMainActivity.ResizeBaseNotes(mBaseNotes);
+            mMainActivity.resizeBaseNotes(mBaseNotes);
         }
         //mGridLines.reset();
         for (int i = 0; i <= numHorizLines; i++) {

@@ -17,16 +17,26 @@ import com.gmail.rallen.gridstrument.extensions.tryLog
 
 class MidiRepository(private val context: Context) : MidiManager.OnDeviceOpenedListener {
 
-    private val midiManager = context.getSystemService(Context.MIDI_SERVICE) as MidiManager
+    private lateinit var midiManager: MidiManager
     private val handler: Handler = Handler(Looper.getMainLooper())
 
     private var midiState = DISCONNECTED
     private var device: MidiDevice? = null
     private var inputPort: MidiInputPort? = null
 
+    /**
+     * Can only be called in onCreate or later
+     */
     fun setup() {
+        midiManager = context.getSystemService(Context.MIDI_SERVICE) as MidiManager
         midiManager.registerDeviceCallback(deviceCallback, handler)
         connectToFirstAvailableDevice()
+    }
+
+    fun turnOffAllNotes() {
+        for (channel in 1..16) {
+            send(getAllNotesOffCC(channel))
+        }
     }
 
     fun send(midiEvent: MidiEvent) = tryLog {
