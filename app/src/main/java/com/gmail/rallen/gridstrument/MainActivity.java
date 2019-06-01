@@ -33,6 +33,7 @@ public class MainActivity
     private OSCPortOut mOSCPortOut    = null;
 
     private ArrayList<Integer> mBaseNotes = new ArrayList<>();
+    private MidiRepository midiRepo;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -46,7 +47,10 @@ public class MainActivity
         getWindowManager().getDefaultDisplay().getMetrics(dm);
         mGLView.setDPI(dm.xdpi, dm.ydpi);
 
-        SetupOSC();
+//        SetupOSC();
+	    midiRepo = new MidiRepository(this);
+        midiRepo.setup();
+        mGLView.setMidiRepo( midiRepo );
 
         /*
         final View decorView = getWindow().getDecorView();
@@ -218,9 +222,9 @@ public class MainActivity
     protected void onActivityResult(int requestCode, int resultCode, Intent data)
     {
         super.onActivityResult(requestCode, resultCode, data);
-        if(requestCode==PREF_REQ_CODE) {
-            SetupOSC();
-        }
+//        if(requestCode==PREF_REQ_CODE) {
+//            SetupOSC();
+//        }
     }
 
     private class OSCSendMessageTask extends AsyncTask<Object, Void, Boolean> {
