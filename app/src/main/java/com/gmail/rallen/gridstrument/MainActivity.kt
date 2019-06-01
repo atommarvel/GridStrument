@@ -7,6 +7,7 @@ import android.util.DisplayMetrics
 import android.view.Menu
 import android.view.MenuItem
 import androidx.appcompat.app.AppCompatActivity
+import com.gmail.rallen.gridstrument.extensions.tryLog
 import java.util.ArrayList
 
 class MainActivity : AppCompatActivity(), TuningDialogFragment.OnTuningDialogDoneListener {
@@ -68,7 +69,8 @@ class MainActivity : AppCompatActivity(), TuningDialogFragment.OnTuningDialogDon
         else -> super.onOptionsItemSelected(item)
     }
 
-    override fun onTuningDialogDone(values: ArrayList<Int>) {
+    override fun onTuningDialogDone(values: ArrayList<Int>?) = tryLog {
+        checkNotNull(values)
         updateBaseNotes(values)
         gLView.baseNotes = ArrayList(baseNotes)
     }
