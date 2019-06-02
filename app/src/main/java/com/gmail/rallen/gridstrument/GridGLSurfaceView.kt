@@ -217,6 +217,7 @@ class GridGLSurfaceView @JvmOverloads constructor(context: Context, initialBaseN
         private var lastPressure = -1
         private var lastModulationX = -1
         private var lastModulationY = -1
+
         fun sendPressure(channel: Int, p: Float) {
             val pi = clamp(0f, 127f, Math.floor((p * 127 + 0.5f).toDouble()).toFloat()).toInt()
             if (pi != lastPressure) {
@@ -230,6 +231,8 @@ class GridGLSurfaceView @JvmOverloads constructor(context: Context, initialBaseN
             if (mxi != lastModulationX) {
                 Log.d("sendModulationX", String.format("/vkb_midi/%d/pitch=%d", channel, mxi))
                 lastModulationX = mxi
+                val midiEvent = MidiPitchBendEvent(mxi)
+                midiRepo?.send(midiEvent)
             }
         }
 
@@ -245,14 +248,14 @@ class GridGLSurfaceView @JvmOverloads constructor(context: Context, initialBaseN
             val vi = clamp(0f, 127f, Math.floor((velocity * 127 + 0.5f).toDouble()).toFloat()).toInt()
             Log.d("sendNoteOn", String.format("/vkb_midi/%d/note/%d=%d", channel, note, vi))
             val midiEvent = MidiNoteEvent(note, NoteTrigger.ON)
-            midiRepo!!.send(midiEvent)
+            midiRepo?.send(midiEvent)
         }
 
         fun sendNoteOff(channel: Int, note: Int, velocity: Float) {
             val vi = clamp(0f, 127f, Math.floor((velocity * 127 + 0.5f).toDouble()).toFloat()).toInt()
             Log.d("sendNoteOff", String.format("/vkb_midi/%d/note/%d=%d", channel, note, vi))
             val midiEvent = MidiNoteEvent(note, NoteTrigger.OFF)
-            midiRepo!!.send(midiEvent)
+            midiRepo?.send(midiEvent)
         }
     }
 

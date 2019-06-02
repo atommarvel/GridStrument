@@ -34,13 +34,13 @@ class MidiRepository(private val context: Context) : MidiManager.OnDeviceOpenedL
     }
 
     fun turnOffAllNotes() {
-        for (channel in 1..16) {
-            send(getAllNotesOffCC(channel))
+        for (channel in 0..15) {
+            send(getAllNotesOffCCEvent(channel))
         }
     }
 
     fun send(midiEvent: MidiEvent) = tryLog {
-        inputPort?.send(midiEvent.byteArray, 0, midiEvent.byteCount)
+        inputPort?.send(midiEvent.byteArray, 0, midiEvent.byteArray.size)
     }
 
     private fun connectToFirstAvailableDevice() = tryLog {
@@ -48,7 +48,6 @@ class MidiRepository(private val context: Context) : MidiManager.OnDeviceOpenedL
         val deviceInfo = midiManager.devices.firstOrNull { deviceInfo ->
             deviceInfo.inputPortCount > 0
         }
-
         if (deviceInfo != null) {
             midiManager.openDevice(deviceInfo, this, handler)
         } else {
