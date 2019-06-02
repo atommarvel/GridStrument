@@ -7,6 +7,9 @@ import android.opengl.GLSurfaceView
 import android.opengl.Matrix
 import android.util.Log
 import android.view.MotionEvent
+import com.gmail.rallen.gridstrument.events.MidiNoteEvent
+import com.gmail.rallen.gridstrument.events.MidiPitchBendEvent
+import com.gmail.rallen.gridstrument.events.NoteTrigger
 
 /**
  * GridGLSurfaceView (really a ViewController)

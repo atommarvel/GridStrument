@@ -11,6 +11,8 @@ import android.os.Looper
 import android.widget.Toast
 import com.gmail.rallen.gridstrument.MidiState.CONNECTED
 import com.gmail.rallen.gridstrument.MidiState.DISCONNECTED
+import com.gmail.rallen.gridstrument.events.MidiEvent
+import com.gmail.rallen.gridstrument.events.getAllNotesOffCCEvent
 import com.gmail.rallen.gridstrument.extensions.log
 import com.gmail.rallen.gridstrument.extensions.midi.name
 import com.gmail.rallen.gridstrument.extensions.tryLog
