@@ -9,9 +9,10 @@ import android.view.ViewGroup
 import android.widget.Button
 import android.widget.LinearLayout
 import android.widget.NumberPicker
-import androidx.core.os.bundleOf
 import androidx.fragment.app.DialogFragment
-import com.gmail.rallen.gridstrument.extensions.tryLog
+import com.gmail.rallen.gridstrument.extension.tryLog
+import com.gmail.rallen.gridstrument.repo.BaseNotesRepo
+import org.koin.android.ext.android.inject
 import java.util.ArrayList
 
 /**
@@ -19,6 +20,9 @@ import java.util.ArrayList
  * http://www.i-programmer.info/programming/android/7647-android-adventures-a-numberpicker-dialogfragment-project.html
  */
 class TuningDialogFragment : DialogFragment() {
+
+    private val baseNotesRepo: BaseNotesRepo by inject()
+
     private var values: List<Int> = emptyList()
     private var numPickers: Array<NumberPicker> = arrayOf()
     private var mListener: OnTuningDialogDoneListener? = null
@@ -38,7 +42,7 @@ class TuningDialogFragment : DialogFragment() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        values = savedInstanceState?.getIntegerArrayList(KEY_CURR_VALUES) ?: arguments?.getIntegerArrayList(KEY_BASE_NOTES) ?: ArrayList()
+        values = savedInstanceState?.getIntegerArrayList(KEY_CURR_VALUES) ?: baseNotesRepo.notes
     }
 
     override fun onSaveInstanceState(outState: Bundle) {
@@ -116,12 +120,9 @@ class TuningDialogFragment : DialogFragment() {
     }
 
     companion object {
-        private const val KEY_BASE_NOTES = "base_notes"
         private const val KEY_CURR_VALUES = "curr_values"
         private val notes = arrayOf("C", "C♯", "D", "D♯", "E", "F", "F♯", "G", "G♯", "A", "A♯", "B")
 
-        fun newInstance(initValues: List<Int>): TuningDialogFragment = TuningDialogFragment().apply {
-            arguments = bundleOf(KEY_BASE_NOTES to initValues)
-        }
+        fun newInstance(): TuningDialogFragment = TuningDialogFragment()
     }
 }

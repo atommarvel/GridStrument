@@ -1,4 +1,4 @@
-package com.gmail.rallen.gridstrument.events
+package com.gmail.rallen.gridstrument.event
 
 fun getAllNotesOffCCEvent(channel: Int = 0): MidiCCEvent =
     MidiCCEvent(123, 0, channel)

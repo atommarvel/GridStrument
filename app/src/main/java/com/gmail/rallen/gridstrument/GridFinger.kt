@@ -4,12 +4,16 @@ import android.graphics.PointF
 import android.opengl.Matrix
 import android.util.Log
 import androidx.core.math.MathUtils
-import com.gmail.rallen.gridstrument.events.MidiNoteEvent
-import com.gmail.rallen.gridstrument.events.MidiPitchBendEvent
-import com.gmail.rallen.gridstrument.events.NoteTrigger
+import com.gmail.rallen.gridstrument.event.Clamper
+import com.gmail.rallen.gridstrument.event.MidiNoteEvent
+import com.gmail.rallen.gridstrument.event.MidiPitchBendEvent
+import com.gmail.rallen.gridstrument.event.NoteTrigger
+import com.gmail.rallen.gridstrument.repo.BaseNotesRepo
+import com.gmail.rallen.gridstrument.repo.GridConfigRepo
+import com.gmail.rallen.gridstrument.repo.MidiRepo
+import com.gmail.rallen.gridstrument.util.xyToNote
 
-class GridFinger(val channel: Int, val midiRepo: MidiRepository, val gridConfigRepo: GridConfigRepository, val baseNotesRepo: BaseNotesRepository) {
-    val clamper = Clamper(gridConfigRepo)
+class GridFinger(val channel: Int, val midiRepo: MidiRepo, val gridConfigRepo: GridConfigRepo, val baseNotesRepo: BaseNotesRepo, val clamper: Clamper) {
     var touch = PointF()
     var current = PointF()
     var pressure = 0.0f

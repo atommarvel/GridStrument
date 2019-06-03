@@ -1,4 +1,4 @@
-package com.gmail.rallen.gridstrument.extensions
+package com.gmail.rallen.gridstrument.extension
 
 import android.util.Log
 

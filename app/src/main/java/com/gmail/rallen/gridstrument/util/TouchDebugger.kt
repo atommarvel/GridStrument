@@ -1,8 +1,8 @@
-package com.gmail.rallen.gridstrument
+package com.gmail.rallen.gridstrument.util
 
 import android.util.Log
 import android.view.MotionEvent
-import com.gmail.rallen.gridstrument.extensions.tryLog
+import com.gmail.rallen.gridstrument.extension.tryLog
 
 object TouchDebugger {
 

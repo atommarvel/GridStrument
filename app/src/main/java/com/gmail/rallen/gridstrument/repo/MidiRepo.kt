@@ -1,4 +1,4 @@
-package com.gmail.rallen.gridstrument
+package com.gmail.rallen.gridstrument.repo
 
 import android.content.Context
 import android.media.midi.MidiDevice
@@ -9,15 +9,19 @@ import android.media.midi.MidiManager
 import android.os.Handler
 import android.os.Looper
 import android.widget.Toast
-import com.gmail.rallen.gridstrument.MidiState.CONNECTED
-import com.gmail.rallen.gridstrument.MidiState.DISCONNECTED
-import com.gmail.rallen.gridstrument.events.MidiEvent
-import com.gmail.rallen.gridstrument.events.getAllNotesOffCCEvent
-import com.gmail.rallen.gridstrument.extensions.log
-import com.gmail.rallen.gridstrument.extensions.midi.name
-import com.gmail.rallen.gridstrument.extensions.tryLog
+import com.gmail.rallen.gridstrument.event.MidiEvent
+import com.gmail.rallen.gridstrument.event.getAllNotesOffCCEvent
+import com.gmail.rallen.gridstrument.extension.log
+import com.gmail.rallen.gridstrument.extension.midi.name
+import com.gmail.rallen.gridstrument.extension.tryLog
+import com.gmail.rallen.gridstrument.repo.MidiState.CONNECTED
+import com.gmail.rallen.gridstrument.repo.MidiState.DISCONNECTED
 
-class MidiRepository(private val context: Context) : MidiManager.OnDeviceOpenedListener {
+enum class MidiState {
+    CONNECTED, DISCONNECTED
+}
+
+class MidiRepo(private val context: Context) : MidiManager.OnDeviceOpenedListener {
 
     private lateinit var midiManager: MidiManager
     private val handler: Handler = Handler(Looper.getMainLooper())
@@ -29,7 +33,7 @@ class MidiRepository(private val context: Context) : MidiManager.OnDeviceOpenedL
     /**
      * Can only be called in onCreate or later
      */
-    fun setup() {
+    fun onCreate() {
         midiManager = context.getSystemService(Context.MIDI_SERVICE) as MidiManager
         midiManager.registerDeviceCallback(deviceCallback, handler)
         connectToFirstAvailableDevice()
@@ -67,7 +71,7 @@ class MidiRepository(private val context: Context) : MidiManager.OnDeviceOpenedL
 
         override fun onDeviceRemoved(deviceInfo: MidiDeviceInfo?) = tryLog {
             checkNotNull(deviceInfo)
-            if (this@MidiRepository.device?.info == deviceInfo) {
+            if (this@MidiRepo.device?.info == deviceInfo) {
                 midiState = DISCONNECTED
                 clearDevice()
                 log("disconnected from device ${deviceInfo.name}")
@@ -92,9 +96,5 @@ class MidiRepository(private val context: Context) : MidiManager.OnDeviceOpenedL
         device = null
         inputPort = null
     }
-}
-
-enum class MidiState {
-    CONNECTED, DISCONNECTED
 }
 

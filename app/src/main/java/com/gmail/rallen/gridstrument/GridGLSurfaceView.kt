@@ -4,24 +4,23 @@ import android.content.Context
 import android.opengl.GLSurfaceView
 import android.opengl.Matrix
 import android.util.Log
+import com.gmail.rallen.gridstrument.repo.BaseNotesRepo
+import com.gmail.rallen.gridstrument.repo.FingerRepo
+import com.gmail.rallen.gridstrument.repo.GridConfigRepo
+import com.gmail.rallen.gridstrument.util.xyToNote
 
 /**
- * TODO: fix cell size breakage
  * TODO: send message to the server so they can understand this automatically
  */
 class GridGLSurfaceView @JvmOverloads constructor(
     context: Context,
-    val fingers: List<GridFinger>,
-    val baseNotesRepo: BaseNotesRepository,
-    val gridConfigRepo: GridConfigRepository
+    private val fingerRepo: FingerRepo,
+    private val baseNotesRepo: BaseNotesRepo,
+    private val gridConfigRepo: GridConfigRepo
 ) : GLSurfaceView(context) {
 
-    // TODO: stop holding as activity
-    // main app
-    private var mainActivity: MainActivity? = null
-
     // rendering vars...
-    private val renderer: GridGLRenderer
+    private val renderer: GridGLRenderer = GridGLRenderer()
     private var gridLines: GridLines? = null
     private var noteRects: ArrayList<GridRects>? = null
     private var displayWidth: Int = 0
@@ -43,9 +42,7 @@ class GridGLSurfaceView @JvmOverloads constructor(
     )
 
     init {
-        mainActivity = context as MainActivity
         setEGLContextClientVersion(2)
-        renderer = GridGLRenderer()
         setRenderer(renderer)
     }
 
@@ -56,7 +53,12 @@ class GridGLSurfaceView @JvmOverloads constructor(
         for (i in 0..numHorizLines) {
             var j = 0
             while (j <= numVertLines) {
-                val note = xyToNote(i * gridConfigRepo.cellWidth + 1, j * gridConfigRepo.cellHeight + 1, gridConfigRepo, baseNotesRepo)
+                val note = xyToNote(
+                    i * gridConfigRepo.cellWidth + 1,
+                    j * gridConfigRepo.cellHeight + 1,
+                    gridConfigRepo,
+                    baseNotesRepo
+                )
                 val curColor = mNoteColors[note % 12]
                 noteRects!![k].setColor(curColor[0], curColor[1], curColor[2], curColor[3])
                 j++
@@ -68,7 +70,7 @@ class GridGLSurfaceView @JvmOverloads constructor(
     private fun resetRenderer() {
         renderer.clearItems()
         for (i in 0..15) {
-            renderer.addItem(fingers[i].lightRect)
+            renderer.addItem(fingerRepo.fingers[i].lightRect)
         }
         for (g in noteRects!!) {
             renderer.addItem(g)
@@ -99,14 +101,19 @@ class GridGLSurfaceView @JvmOverloads constructor(
                     resizedBaseNotes.removeAt(i)
                 }
             }
-            mainActivity!!.resizeBaseNotes(baseNotesRepo.notes)
+            baseNotesRepo.updateBaseNotes(resizedBaseNotes)
         }
         //gridLines.reset();
         for (i in 0..numHorizLines) {
             gridLines!!.add(i.toFloat() * gridConfigRepo.cellWidth, 0.0f, 0.0f, i.toFloat() * gridConfigRepo.cellWidth, numHorizLines.toFloat() * gridConfigRepo.cellHeight, 0.0f)
             gridLines!!.add(0.0f, i.toFloat() * gridConfigRepo.cellHeight, 0.0f, numHorizLines.toFloat() * gridConfigRepo.cellWidth, i.toFloat() * gridConfigRepo.cellHeight, 0.0f)
             for (j in 0..numVertLines) {
-                val note = xyToNote(i * gridConfigRepo.cellWidth + 1, j * gridConfigRepo.cellHeight + 1, gridConfigRepo, baseNotesRepo)
+                val note = xyToNote(
+                    i * gridConfigRepo.cellWidth + 1,
+                    j * gridConfigRepo.cellHeight + 1,
+                    gridConfigRepo,
+                    baseNotesRepo
+                )
                 val curColor = mNoteColors[note % 12]
                 val curRect = GridRects(curColor[0], curColor[1], curColor[2], curColor[3])
                 curRect.add(-gridConfigRepo.cellWidth / 4f, gridConfigRepo.cellHeight / 6f, 0f, gridConfigRepo.cellWidth / 6f, -gridConfigRepo.cellHeight / 4f, 0f)
@@ -119,11 +126,11 @@ class GridGLSurfaceView @JvmOverloads constructor(
         }
 
         for (i in 0..15) {
-            fingers[i].lightRect.reset()
-            fingers[i].lightRect.add(-gridConfigRepo.cellWidth / 2, gridConfigRepo.cellHeight / 2, 0.0f, gridConfigRepo.cellWidth / 2, -gridConfigRepo.cellHeight / 2, 0.0f)
-            Matrix.setIdentityM(fingers[i].lightMatrix, 0)
-            Matrix.translateM(fingers[i].lightMatrix, 0, -gridConfigRepo.cellWidth / 2, -gridConfigRepo.cellHeight / 2, 0.0f) // offscreen
-            fingers[i].lightRect.setModelMatrix(fingers[i].lightMatrix)
+            fingerRepo.fingers[i].lightRect.reset()
+            fingerRepo.fingers[i].lightRect.add(-gridConfigRepo.cellWidth / 2, gridConfigRepo.cellHeight / 2, 0.0f, gridConfigRepo.cellWidth / 2, -gridConfigRepo.cellHeight / 2, 0.0f)
+            Matrix.setIdentityM(fingerRepo.fingers[i].lightMatrix, 0)
+            Matrix.translateM(fingerRepo.fingers[i].lightMatrix, 0, -gridConfigRepo.cellWidth / 2, -gridConfigRepo.cellHeight / 2, 0.0f) // offscreen
+            fingerRepo.fingers[i].lightRect.setModelMatrix(fingerRepo.fingers[i].lightMatrix)
         }
 
         resetRenderer()

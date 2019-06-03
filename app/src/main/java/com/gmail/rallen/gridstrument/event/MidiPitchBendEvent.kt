@@ -1,4 +1,4 @@
-package com.gmail.rallen.gridstrument.events
+package com.gmail.rallen.gridstrument.event
 
 import com.gmail.rallen.gridstrument.core.AVAIL_VALS
 

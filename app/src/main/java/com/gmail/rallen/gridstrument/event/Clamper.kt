@@ -1,9 +1,10 @@
-package com.gmail.rallen.gridstrument
+package com.gmail.rallen.gridstrument.event
 
 import androidx.core.math.MathUtils
+import com.gmail.rallen.gridstrument.repo.GridConfigRepo
 
 // TODO: revisit calculations
-class Clamper(private val gridConfigRepo: GridConfigRepository) {
+class Clamper(private val gridConfigRepo: GridConfigRepo) {
 
     fun clampPressure(pressure: Float) =
         MathUtils.clamp(Math.floor((pressure * 127 + 0.5f).toDouble()).toFloat(), 0f, 127f).toInt()

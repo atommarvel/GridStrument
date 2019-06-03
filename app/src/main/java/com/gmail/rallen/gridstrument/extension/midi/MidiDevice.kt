@@ -1,4 +1,4 @@
-package com.gmail.rallen.gridstrument.extensions.midi
+package com.gmail.rallen.gridstrument.extension.midi
 
 import android.media.midi.MidiDeviceInfo
 

@@ -1,4 +1,4 @@
-package com.gmail.rallen.gridstrument.events
+package com.gmail.rallen.gridstrument.event
 
 enum class NoteTrigger(val hex: Int) {
     ON(0x90),

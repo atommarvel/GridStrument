@@ -1,4 +1,4 @@
-package com.gmail.rallen.gridstrument.events
+package com.gmail.rallen.gridstrument.event
 
 interface MidiEvent {
     /**
