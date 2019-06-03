@@ -1,4 +1,4 @@
-package com.gmail.rallen.gridstrument
+package com.gmail.rallen.gridstrument.gl
 
 import android.content.Context
 import android.opengl.GLSurfaceView

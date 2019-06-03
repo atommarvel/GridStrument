@@ -1,9 +1,10 @@
-package com.gmail.rallen.gridstrument
+package com.gmail.rallen.gridstrument.screen
 
 import android.os.Bundle
 import android.preference.Preference
 import android.preference.PreferenceActivity
 import android.preference.PreferenceFragment
+import com.gmail.rallen.gridstrument.R
 
 // TODO: Upgrade to AndroidX Preference Library
 class MainPreferenceActivity : PreferenceActivity() {

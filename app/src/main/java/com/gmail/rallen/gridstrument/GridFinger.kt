@@ -8,11 +8,13 @@ import com.gmail.rallen.gridstrument.event.Clamper
 import com.gmail.rallen.gridstrument.event.MidiNoteEvent
 import com.gmail.rallen.gridstrument.event.MidiPitchBendEvent
 import com.gmail.rallen.gridstrument.event.NoteTrigger
+import com.gmail.rallen.gridstrument.gl.GridRects
 import com.gmail.rallen.gridstrument.repo.BaseNotesRepo
 import com.gmail.rallen.gridstrument.repo.GridConfigRepo
 import com.gmail.rallen.gridstrument.repo.MidiRepo
 import com.gmail.rallen.gridstrument.util.xyToNote
 
+// TODO: Split into UI vs MIDI
 class GridFinger(val channel: Int, val midiRepo: MidiRepo, val gridConfigRepo: GridConfigRepo, val baseNotesRepo: BaseNotesRepo, val clamper: Clamper) {
     var touch = PointF()
     var current = PointF()

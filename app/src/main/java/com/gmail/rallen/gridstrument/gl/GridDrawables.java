@@ -1,4 +1,4 @@
-package com.gmail.rallen.gridstrument;
+package com.gmail.rallen.gridstrument.gl;
 
 import android.opengl.GLES20;
 import android.opengl.Matrix;

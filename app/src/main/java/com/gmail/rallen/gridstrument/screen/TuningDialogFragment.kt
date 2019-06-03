@@ -1,4 +1,4 @@
-package com.gmail.rallen.gridstrument
+package com.gmail.rallen.gridstrument.screen
 
 import android.content.Context
 import android.os.Bundle

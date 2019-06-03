@@ -1,4 +1,4 @@
-package com.gmail.rallen.gridstrument
+package com.gmail.rallen.gridstrument.screen
 
 import android.annotation.SuppressLint
 import android.content.Intent
@@ -6,7 +6,9 @@ import android.os.Bundle
 import android.view.Menu
 import android.view.MenuItem
 import androidx.appcompat.app.AppCompatActivity
+import com.gmail.rallen.gridstrument.R
 import com.gmail.rallen.gridstrument.extension.tryLog
+import com.gmail.rallen.gridstrument.gl.GridGLSurfaceView
 import com.gmail.rallen.gridstrument.repo.BaseNotesRepo
 import com.gmail.rallen.gridstrument.repo.GridConfigRepo
 import com.gmail.rallen.gridstrument.repo.MidiRepo

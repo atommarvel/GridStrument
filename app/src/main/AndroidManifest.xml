@@ -19,7 +19,7 @@
         android:theme="@style/AppTheme"
         tools:ignore="GoogleAppIndexingWarning">
         <activity
-            android:name=".MainActivity"
+            android:name=".screen.MainActivity"
             android:label="@string/app_name"
             android:screenOrientation="landscape" >
             <intent-filter>
@@ -28,7 +28,7 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".MainPreferenceActivity"
+            android:name=".screen.MainPreferenceActivity"
             android:label="@string/app_preference_name"
             android:screenOrientation="landscape" >
             <intent-filter>
