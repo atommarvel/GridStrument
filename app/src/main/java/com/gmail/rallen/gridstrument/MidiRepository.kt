@@ -41,6 +41,7 @@ class MidiRepository(private val context: Context) : MidiManager.OnDeviceOpenedL
         }
     }
 
+    // TODO: create a transformation helper class that encompasses clamping & deduper
     fun send(midiEvent: MidiEvent) = tryLog {
         inputPort?.send(midiEvent.byteArray, 0, midiEvent.byteArray.size)
     }

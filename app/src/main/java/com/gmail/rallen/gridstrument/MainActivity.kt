@@ -1,5 +1,6 @@
 package com.gmail.rallen.gridstrument
 
+import android.annotation.SuppressLint
 import android.content.Intent
 import android.os.Bundle
 import android.preference.PreferenceManager
@@ -8,31 +9,35 @@ import android.view.Menu
 import android.view.MenuItem
 import androidx.appcompat.app.AppCompatActivity
 import com.gmail.rallen.gridstrument.extensions.tryLog
-import java.util.ArrayList
 
 class MainActivity : AppCompatActivity(), TuningDialogFragment.OnTuningDialogDoneListener {
 
-    private var baseNotes = emptyList<Int>()
     private val midiRepo = MidiRepository(this)
+    private val gridConfigRepo = GridConfigRepository()
+    private val baseNotesRepo = BaseNotesRepository()
+    private val fingers = (0..16).map { GridFinger(it,midiRepo, gridConfigRepo, baseNotesRepo) }
 
     private lateinit var gLView: GridGLSurfaceView
 
+    @SuppressLint("ClickableViewAccessibility")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
         setupBaseNotes()
 
-        gLView = GridGLSurfaceView(this, ArrayList(baseNotes)) // TODO: switch glView to just use a list
-        setContentView(gLView)
+        midiRepo.setup()
 
         val dm = DisplayMetrics()
         windowManager.defaultDisplay.getMetrics(dm)
-        gLView.setDPI(dm.xdpi, dm.ydpi)
+        gridConfigRepo.xdpi = dm.xdpi
+        gridConfigRepo.ydpi = dm.ydpi
 
-        midiRepo.setup()
-        gLView.setMidiRepo(midiRepo)
+        gLView = GridGLSurfaceView(this, fingers, baseNotesRepo, gridConfigRepo)
+        gLView.setOnTouchListener(GridTouchListener(fingers))
+        setContentView(gLView)
     }
 
+    // TODO: move to repo
     private fun setupBaseNotes() {
         val prefs = PreferenceManager.getDefaultSharedPreferences(baseContext)
         val defaultNum = Integer.parseInt(getString(R.string.default_num_base_notes))
@@ -41,7 +46,7 @@ class MainActivity : AppCompatActivity(), TuningDialogFragment.OnTuningDialogDon
         for (i in 0 until numBaseNotes) {
             updatedNotes.add(prefs.getInt("base_note_$i", 48 + 5 * i))
         }
-        baseNotes = updatedNotes
+        baseNotesRepo.notes = updatedNotes
     }
 
     fun resizeBaseNotes(notes: List<Int>) = updateBaseNotes(notes)
@@ -62,7 +67,7 @@ class MainActivity : AppCompatActivity(), TuningDialogFragment.OnTuningDialogDon
             true
         }
         R.id.action_tuning -> {
-            val dialog = TuningDialogFragment.newInstance(gLView.baseNotes)
+            val dialog = TuningDialogFragment.newInstance(baseNotesRepo.notes)
             dialog.show(supportFragmentManager, "TuningDialogFragment")
             true
         }
@@ -72,11 +77,11 @@ class MainActivity : AppCompatActivity(), TuningDialogFragment.OnTuningDialogDon
     override fun onTuningDialogDone(values: List<Int>?) = tryLog {
         checkNotNull(values)
         updateBaseNotes(values)
-        gLView.baseNotes = ArrayList(baseNotes)
+        gLView.onBaseNotesUpdated()
     }
 
     private fun updateBaseNotes(notes: List<Int>) {
-        baseNotes = notes
+        baseNotesRepo.notes = notes
         val prefs = PreferenceManager.getDefaultSharedPreferences(baseContext)
         prefs.edit().apply {
             notes.forEachIndexed { index, note ->
