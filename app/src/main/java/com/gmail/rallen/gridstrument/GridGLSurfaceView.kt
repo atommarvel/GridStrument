@@ -10,7 +10,7 @@ import com.gmail.rallen.gridstrument.repo.GridConfigRepo
 import com.gmail.rallen.gridstrument.util.xyToNote
 
 /**
- * TODO: send message to the server so they can understand this automatically
+ * TODO: send pitchBend Range message to the server so they can understand this automatically
  */
 class GridGLSurfaceView @JvmOverloads constructor(
     context: Context,
