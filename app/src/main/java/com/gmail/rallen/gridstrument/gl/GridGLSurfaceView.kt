@@ -70,7 +70,7 @@ class GridGLSurfaceView @JvmOverloads constructor(
     private fun resetRenderer() {
         renderer.clearItems()
         for (i in 0..15) {
-            renderer.addItem(fingerRepo.fingers[i].lightRect)
+            renderer.addItem(fingerRepo.fingers[i].glFinger.lightRect)
         }
         for (g in noteRects!!) {
             renderer.addItem(g)
@@ -125,12 +125,15 @@ class GridGLSurfaceView @JvmOverloads constructor(
             }
         }
 
+        // TODO: finger.onLayout?
         for (i in 0..15) {
-            fingerRepo.fingers[i].lightRect.reset()
-            fingerRepo.fingers[i].lightRect.add(-gridConfigRepo.cellWidth / 2, gridConfigRepo.cellHeight / 2, 0.0f, gridConfigRepo.cellWidth / 2, -gridConfigRepo.cellHeight / 2, 0.0f)
-            Matrix.setIdentityM(fingerRepo.fingers[i].lightMatrix, 0)
-            Matrix.translateM(fingerRepo.fingers[i].lightMatrix, 0, -gridConfigRepo.cellWidth / 2, -gridConfigRepo.cellHeight / 2, 0.0f) // offscreen
-            fingerRepo.fingers[i].lightRect.setModelMatrix(fingerRepo.fingers[i].lightMatrix)
+            fingerRepo.fingers[i].glFinger.apply {
+                lightRect.reset()
+                lightRect.add(-gridConfigRepo.cellWidth / 2, gridConfigRepo.cellHeight / 2, 0.0f, gridConfigRepo.cellWidth / 2, -gridConfigRepo.cellHeight / 2, 0.0f)
+                Matrix.setIdentityM(lightMatrix, 0)
+                Matrix.translateM(lightMatrix, 0, -gridConfigRepo.cellWidth / 2, -gridConfigRepo.cellHeight / 2, 0.0f) // offscreen
+                lightRect.setModelMatrix(lightMatrix)
+            }
         }
 
         resetRenderer()

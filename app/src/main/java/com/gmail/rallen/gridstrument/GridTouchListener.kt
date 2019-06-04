@@ -7,16 +7,14 @@ import android.view.View
 import com.gmail.rallen.gridstrument.repo.FingerRepo
 import com.gmail.rallen.gridstrument.util.TouchDebugger
 
-class GridTouchListener(val fingerRepo: FingerRepo) : View.OnTouchListener {
+class GridTouchListener(private val fingerRepo: FingerRepo) : View.OnTouchListener {
 
     @SuppressLint("ClickableViewAccessibility")
     override fun onTouch(view: View, ev: MotionEvent): Boolean {
         val pointerCount = ev.pointerCount
-
-        for (p in 0 until pointerCount) {
-            val pointerId = ev.getPointerId(p)
-            fingerRepo.fingers[pointerId].current.set(ev.getX(p), view.height - ev.getY(p)) // Y-invert for OpenGL
-            fingerRepo.fingers[pointerId].pressure = (ev.getPressure(p))
+        for (pointerIndex in 0 until pointerCount) {
+            val pointerId = ev.getPointerId(pointerIndex)
+            fingerRepo.fingers[pointerId].update(view, ev, pointerIndex)
         }
 
         val historySize = ev.historySize
@@ -24,6 +22,7 @@ class GridTouchListener(val fingerRepo: FingerRepo) : View.OnTouchListener {
             Log.e("samp", "UNEXPECTED HISTORY!")
         }
         TouchDebugger.log(ev)
+
         when (ev.actionMasked) {
             MotionEvent.ACTION_POINTER_DOWN -> fingerRepo.fingers[ev.getPointerId(ev.actionIndex)].eventDown()
             MotionEvent.ACTION_POINTER_UP -> fingerRepo.fingers[ev.getPointerId(ev.actionIndex)].eventUp()
@@ -31,7 +30,8 @@ class GridTouchListener(val fingerRepo: FingerRepo) : View.OnTouchListener {
                 fingerRepo.fingers[ev.getPointerId(0)].eventDown()
                 view.requestUnbufferedDispatch(ev) // move events will not be buffered (Android L & later)
             }
-            MotionEvent.ACTION_UP, MotionEvent.ACTION_CANCEL -> fingerRepo.fingers[ev.getPointerId(0)].eventUp()
+            MotionEvent.ACTION_UP,
+            MotionEvent.ACTION_CANCEL -> fingerRepo.fingers[ev.getPointerId(0)].eventUp()
             MotionEvent.ACTION_MOVE -> for (p in 0 until pointerCount) {
                 fingerRepo.fingers[ev.getPointerId(p)].eventMove()
             }
