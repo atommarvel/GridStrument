@@ -1,9 +1,8 @@
 package com.gmail.rallen.gridstrument.event
 
 /**
- * Prevents sending the same CC event twice in a row
+ * Prevents sending the same midi event twice in a row
  * TODO: refactor to be backed by a map that supports any status byte
- * TODO: use in a larger transform class
  */
 class MidiEventDeDuper {
     private var lastPressure = -1

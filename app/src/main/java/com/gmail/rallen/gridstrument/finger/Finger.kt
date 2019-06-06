@@ -79,11 +79,13 @@ class Finger(private val pointerId: Int, private val gridConfigRepo: GridConfigR
     }
 
     fun eventMove() {
+        // Midi
         val midiData = EventData(
             modX = clamper.clampPitchBend(modX)
         )
         midiFinger.eventMove(midiData)
 
+        // GL
         val clampPressure = clamper.clampPressure(pressure)
         val glData = EventData(
             pressure = clampPressure

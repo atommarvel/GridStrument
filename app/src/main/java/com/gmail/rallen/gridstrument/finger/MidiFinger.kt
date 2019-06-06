@@ -1,13 +1,14 @@
 package com.gmail.rallen.gridstrument.finger
 
 import android.util.Log
+import com.gmail.rallen.gridstrument.event.MidiEventDeDuper
 import com.gmail.rallen.gridstrument.event.MidiNoteEvent
 import com.gmail.rallen.gridstrument.event.MidiPitchBendEvent
 import com.gmail.rallen.gridstrument.event.NoteTrigger
 import com.gmail.rallen.gridstrument.repo.MidiRepo
 import org.koin.core.KoinComponent
 
-class MidiFinger(private val midiRepo: MidiRepo) : KoinComponent, FingerBehavior {
+class MidiFinger(private val midiRepo: MidiRepo, private val midiEventDeDuper: MidiEventDeDuper) : KoinComponent, FingerBehavior {
 
     private var currentChannel = -1
     private var currentNote = -1
@@ -66,10 +67,14 @@ class MidiFinger(private val midiRepo: MidiRepo) : KoinComponent, FingerBehavior
 
     override fun eventMove(eventData: EventData) {
         validateEventMove(eventData)
-        midiRepo.send(MidiPitchBendEvent(eventData.modX, eventData.channel))
+        if (midiEventDeDuper.isModXNotDupe(eventData.modX)) {
+            midiRepo.send(MidiPitchBendEvent(eventData.modX, eventData.channel))
+        }
         //        TODO
+        // be sure to dedupe
 //        oscCtrl.sendPressure(channel, pressure)
         //        TODO
+        // be sure to dedupe
 //        oscCtrl.sendModulationY(channel, modulationY)
     }
 

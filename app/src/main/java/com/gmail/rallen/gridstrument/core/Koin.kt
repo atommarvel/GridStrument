@@ -2,6 +2,7 @@ package com.gmail.rallen.gridstrument.core
 
 import com.gmail.rallen.gridstrument.GridTouchListener
 import com.gmail.rallen.gridstrument.event.Clamper
+import com.gmail.rallen.gridstrument.event.MidiEventDeDuper
 import com.gmail.rallen.gridstrument.finger.Finger
 import com.gmail.rallen.gridstrument.finger.GLFinger
 import com.gmail.rallen.gridstrument.finger.MidiFinger
@@ -19,8 +20,9 @@ val appModule = module {
     single { FingerRepo() }
     single { Clamper(get()) }
 
+    factory { MidiEventDeDuper() }
     factory { (pointerId: Int) -> Finger(pointerId, get(), get(), get()) }
-    factory { MidiFinger(get()) }
+    factory { MidiFinger(get(), get()) }
     factory { GLFinger() }
     factory {
         GridGLSurfaceView(get(), get(), get(), get()).also {
